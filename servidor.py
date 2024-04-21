@@ -7,11 +7,11 @@ def generate_checksum(data):
     return hashlib.md5(data.encode()).hexdigest()
 
 host = gethostname()
-port = 5050
+port = 5052
 addr = (host, port)
 format = 'utf-8'
 print(f'HOST: {host} PORT: {port}')
-disconnect_msg = 'disconnect'
+disconnect_msg = 'exit'
 
 server = socket(AF_INET, SOCK_STREAM)
 server.bind(addr)
@@ -19,7 +19,7 @@ server.listen(5)
 
 while True:
     con, adr = server.accept()
-    con.settimeout(5)  # setting a timeout of 5 seconds
+    con.settimeout(10)  # setting a timeout of 5 seconds
 
     while True:
         try:
@@ -36,6 +36,7 @@ while True:
                 price_response = get_coin_price(client_msg)
                 if price_response:
                     price_response = f"${price_response}"
+                    
                 else:
                     price_response = "Moeda não encontrada."
                 con.send(price_response.encode(format))
@@ -50,4 +51,4 @@ while True:
             print("Client response timed out.")
             continue
 
-server.close()
+
