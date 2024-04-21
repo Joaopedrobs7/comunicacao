@@ -7,7 +7,7 @@ def generate_checksum(data):
     return hashlib.md5(data.encode()).hexdigest()
 
 host = gethostname()
-port = 5052
+port = 5050
 addr = (host, port)
 format = 'utf-8'
 print(f'HOST: {host} PORT: {port}')
@@ -25,11 +25,17 @@ while True:
         try:
             # Receive and decode the client message with sequence number and checksum
             msg = con.recv(1024).decode(format)
+
+            if msg == disconnect_msg:
+                print("fechando servidor..")
+                break
+
+
             seq, client_msg, received_checksum = msg.split(';')
 
             # Check if checksum matches
             if generate_checksum(client_msg) == received_checksum:
-                print(f"Mensagem recebida corretamente: {client_msg}")
+                print(f"Message received by client: {client_msg}")
                 con.send(f"ACK{seq}".encode(format))
                 
                 # Fetch and send coin price
@@ -38,15 +44,14 @@ while True:
                     price_response = f"${price_response}"
                     
                 else:
-                    price_response = "Moeda não encontrada."
+                    price_response = 'Moeda nao encontrada.'
                 con.send(price_response.encode(format))
+                
             else:
                 print("Checksum mismatch, requesting retransmission.")
                 con.send(f"NACK{seq}".encode(format))
             
-            if client_msg == disconnect_msg:
-                con.close()
-                break
+            
         except timeout:
             print("Client response timed out.")
             continue
