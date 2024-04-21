@@ -1,6 +1,7 @@
 
 from socket import *
 import hashlib
+import sys
 
 def generate_checksum(data):
     return hashlib.md5(data.encode()).hexdigest()
@@ -20,7 +21,10 @@ while True:
     msg = input("moeda: ")
     if msg == 'exit':
         client.send(msg.encode(format))
-        #break
+        client.shutdown(SHUT_RDWR)
+        client.close()
+        sys.exit(1)
+        
     checksum = generate_checksum(msg)
     message = f"{sequence_number};{msg};{checksum}"
     client.send(message.encode(format))
