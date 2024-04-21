@@ -6,7 +6,7 @@ def generate_checksum(data):
     return hashlib.md5(data.encode()).hexdigest()
 
 host = gethostname()
-port = 5052
+port = 5050
 addr = (host, port)
 format = 'utf-8'
 
@@ -19,7 +19,8 @@ sequence_number = 0
 while True:
     msg = input("moeda: ")
     if msg == 'exit':
-        break
+        client.send(msg.encode(format))
+        #break
     checksum = generate_checksum(msg)
     message = f"{sequence_number};{msg};{checksum}"
     client.send(message.encode(format))
@@ -28,7 +29,6 @@ while True:
 
 
     
-
     # Wait for server ACK
     try:
         server_msg = client.recv(1024).decode(format)
