@@ -2,6 +2,7 @@
 from socket import *
 from getprice import get_coin_price
 import hashlib
+import sys
 
 def generate_checksum(data):
     return hashlib.md5(data.encode()).hexdigest()
@@ -28,7 +29,9 @@ while True:
 
             if msg == disconnect_msg:
                 print("fechando servidor..")
-                break
+                server.shutdown(SHUT_RDWR)
+                server.close()
+                sys.exit(1)
 
 
             seq, client_msg, received_checksum = msg.split(';')
