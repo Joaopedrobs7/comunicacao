@@ -1,22 +1,40 @@
-from socket import*
 
+from socket import *
+import hashlib
+
+def generate_checksum(data):
+    return hashlib.md5(data.encode()).hexdigest()
 
 host = gethostname()
 port = 5050
-addr = host,port
+addr = (host, port)
 format = 'utf-8'
 
-
-client = socket(AF_INET,SOCK_STREAM)
+client = socket(AF_INET, SOCK_STREAM)
+client.settimeout(5)  # setting a timeout of 5 seconds
 client.connect(addr)
 
-while 1:
-    #manda msg pro servidor
+sequence_number = 0
+
+while True:
     msg = input("moeda: ")
-    client.send(msg.encode(format))
-    
-    #recebe msg do servidor e printa
-    server_msg = client.recv(1024)
-    server_msg = server_msg.decode(format)
-    print(server_msg)
-    
+    if msg == 'exit':
+        break
+    checksum = generate_checksum(msg)
+    message = f"{sequence_number};{msg};{checksum}"
+    client.send(message.encode(format))
+
+    # Wait for server ACK
+    try:
+        server_msg = client.recv(1024).decode(format)
+        if server_msg == f"ACK{sequence_number}":
+            print("Message received by server.")
+        elif server_msg == f"NACK{sequence_number}":
+            print("Transmission error, resending...")
+            continue
+        sequence_number += 1
+    except timeout:
+        print("Server response timed out.")
+        continue
+
+client.close()
