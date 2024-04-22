@@ -44,7 +44,7 @@ while True:
             
             server_msg = client.recv(1024)
             server_msg.decode(format)
-            print(server_msg)
+            print(server_msg.decode())
         
         elif server_msg == f"NACK{sequence_number}":
             print("Transmission error, please resend.")
