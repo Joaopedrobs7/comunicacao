@@ -1,34 +1,48 @@
-## Grupo: Gabriel Reis; João Pedro Batista; João Pedro Nóbrega; Mathews Ivo; Théo Moura.
-## Nossa aplicação cliente servidor, via sockets, cuja confiabilidade é atestada pelo protocolo TCP(AF_INET, SOCK_STREAM), rodando em servidor local, intitula receber o nome de uma criptomoeda, registradas na Coingecko, e retornar o valor de mercado dela, em tempo real. 
-### Para tal, uma série de protocolos que pretendem viabilizar o transporte confiável de dados foram aplicados:
-```
-Checksum;
-Timer;
-Sequence Numbers;
-Ack/Nack;
-```
-### Uso:
+# Cliente-Servidor com Sockets
 
- clone o repositório em sua máquina local;
- ```
-  git clone  https://github.com/Joaopedrobs7/comunicacao.git
-```
-Instale o arquivo de requirements com o comando:
-```
- pip install requirements.txt
-```
-```
-Abra dois terminais, um para o servidor e um para o cliente, em ordem: para o cliente acessar o servidor, este precisa estar “rodando”.
-Digite o nome de uma criptomoeda no terminal do cliente;
-```
-Se a mensagem for recebida e passar pelo teste de integridade, o servidor devolverá um Ack ou Nack e número de identificação para o cliente,  que saberá que sua mensagem foi recebida.
+Este é um projeto de aplicação cliente-servidor utilizando sockets TCP (AF_INET, SOCK_STREAM), operando em um servidor local. A aplicação foi projetada para consultar o valor de mercado de criptomoedas em tempo real usando a API da Coingecko.
 
-Caso um ack tenha sido recebido, o servidor operará de duas formas: 
+## Protocolos de Confiabilidade
 
-Caso Moeda Existente -> O servidor devolverá o valor da moeda informada, registrada no Coingecko, através do uso de sua API;
-Caso Moeda Inexistente -> O servidor informa que a moeda não foi encontrada e impele ao cliente um novo input;
-	
-Caso um Nack seja recebido, significa que a comunicação foi estabelecida, mas não foi aprovado no teste de integridade e solicita uma retransmissão com o cliente.
+Para garantir a transferência confiável de dados, a aplicação utiliza os seguintes mecanismos:
 
-	
-Para o caso do cliente dar o comando exit, não acontecerá teste de integridade, meramente deixando a aplicação e fechado o servidor de imediato.  
+- **Checksum**: Para verificar a integridade dos dados.
+- **Timer**: Para controlar o tempo de espera por uma resposta.
+- **Sequence Numbers**: Para ordenar as mensagens enviadas e recebidas.
+- **Ack/Nack**: Para confirmar recebimentos de mensagens.
+
+## Como Usar
+
+### Pré-requisitos
+
+Certifique-se de ter o Python e o pip instalados em sua máquina antes de continuar.
+
+### Instalação
+
+1. Clone o repositório para sua máquina local:
+   ```bash
+   git clone https://github.com/Joaopedrobs7/comunicacao.git
+2. Navegue até o diretório do projeto e instale as dependências:
+   ```bash
+	pip install -r requirements.txt
+   
+### Execução
+
+1. Abra dois terminais: um para o servidor e outro para o cliente.
+2. No terminal do servidor, inicie o servidor com o comando adequado
+   ```bash
+   python3 servidor.py
+4. No terminal do cliente, inicie o cliente com o comando adequado
+   ```bash
+   python3 cliente.py
+6. Digite o nome de uma criptomoeda no terminal do cliente para consultar seu valor.
+
+### Fluxo de Comunicação
+
+- **Recebimento e Teste de Integridade**: Se a mensagem for recebida corretamente, o servidor enviará um Ack (confirmação) ou Nack (erro) com um número de identificação.
+- **Consulta à API**: Se a moeda existir, o servidor retornará o valor atualizado da Coingecko. Caso contrário, informará que a moeda não foi encontrada.
+- **Falhas de Comunicação**: Se um Nack for recebido, o cliente deve retransmitir a mensagem.
+
+### Encerrando a Aplicação
+
+Para encerrar a aplicação, o cliente pode enviar o comando `exit`. Isso não passará por testes de integridade, e o servidor será encerrado imediatamente.
