@@ -17,9 +17,10 @@ Instale o arquivo de requirements com o comando:
 ```
  pip install requirements.txt
 ```
+```
 Abra dois terminais, um para o servidor e um para o cliente, em ordem: para o cliente acessar o servidor, este precisa estar “rodando”.
 Digite o nome de uma criptomoeda no terminal do cliente;
-
+```
 Se a mensagem for recebida e passar pelo teste de integridade, o servidor devolverá um Ack ou Nack e número de identificação para o cliente,  que saberá que sua mensagem foi recebida.
 
 Caso um ack tenha sido recebido, o servidor operará de duas formas: 
