@@ -14,7 +14,7 @@ disconnect_msg = 'exit'
 
 server = socket(AF_INET, SOCK_STREAM)
 server.bind(addr)
-server.listen(5)
+server.listen(1)
 
 while True:
     con, adr = server.accept()
