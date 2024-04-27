@@ -45,4 +45,4 @@ Certifique-se de ter o Python e o pip instalados em sua máquina antes de contin
 
 ### Encerrando a Aplicação
 
-Para encerrar a aplicação, o cliente pode enviar o comando `exit`. Isso não passará por testes de integridade, e o servidor será encerrado imediatamente.
+Para encerrar a aplicação, o cliente pode enviar o comando `exit`. Isso não passará por testes de integridade, o cliente em questao sera desconectado. E o servidor continuara escutando conexões.
