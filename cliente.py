@@ -4,7 +4,7 @@ import hashlib
 import sys
 
 def generate_checksum(data):
-    return hashlib.md5(data.encode()).hexdigest()
+    return hashlib.md5(data.encode()).hexdigest() 
 
 host = gethostname()
 port = 5051
@@ -22,12 +22,13 @@ while True:
     if msg == 'exit':
         client.send(msg.encode(format))
         client.shutdown(SHUT_RDWR)
-        client.close()
         sys.exit(1)
+        
+        
         
     checksum = generate_checksum(msg)
     message = f"{sequence_number};{msg};{checksum}"
-    #message = f"{sequence_number};{msg};{5}" forcar erro
+    #message = f"{sequence_number};{msg};{5}" 
     client.send(message.encode(format))
     
     
@@ -48,6 +49,7 @@ while True:
         
         elif server_msg == f"NACK{sequence_number}":
             print("Transmission error, please resend.")
+            print(server_msg)
             continue
         sequence_number += 1
     except timeout:
