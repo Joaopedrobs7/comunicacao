@@ -2,7 +2,7 @@
 from socket import *
 from getprice import get_coin_price
 from integrity import integrity_check
-import sys
+
 
  
 host = gethostname()
@@ -16,8 +16,11 @@ server = socket(AF_INET, SOCK_STREAM)
 server.bind(addr)
 server.listen(1)
 
+
+
 while True:
     con, adr = server.accept()
+    print("Cliente conectado")
     con.settimeout(10)  # setting a timeout of 5 seconds
 
     while True:
@@ -26,10 +29,9 @@ while True:
             msg = con.recv(1024).decode(format)
 
             if msg == disconnect_msg:
-                print("fechando servidor..")
-                server.shutdown(SHUT_RDWR)
-                server.close()
-                sys.exit(1)
+                print("Cliente saindo..")
+                break
+                
 
 
             seq, client_msg, received_checksum = msg.split(';')
@@ -55,7 +57,7 @@ while True:
             
             
         except timeout:
-            print("Client response timed out.")
+            #print("Client response timed out.")
             continue
 
 
