@@ -14,7 +14,7 @@ def get_coin_price(coin_id):
 
     headers = {
         "accept": "application/json",
-        "x-cg-demo-api-key": "CG-KCJ63ivBgbSBZZDuRYkraGec"
+        "x-cg-demo-api-key": "YOUR KEY"
     }
 
     response = requests.get(url, params=params, headers=headers)
